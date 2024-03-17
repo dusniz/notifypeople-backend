@@ -1,0 +1,43 @@
+version: "3.1"
+
+services:
+
+  db-msngr:
+    image: postgres:latest
+    restart: always
+    container_name: postgres-msngr
+    ports:
+      - "5432:5432"
+    networks:
+      - msngr-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+
+  db-auth:
+    image: postgres:latest
+    restart: always
+    container_name: postgres-auth
+    ports:
+      - "5433:5432"
+    networks:
+      - auth-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    container_name: adminer
+    networks:
+      - auth-network
+      - msngr-network
+    ports:
+      - "8080:8080"
+
+networks:
+  msngr-network:
+    driver: bridge
+  auth-network:
+    driver: bridge
